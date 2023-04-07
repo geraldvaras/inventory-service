@@ -3,7 +3,6 @@ package com.grupolainmaculada.cloud.inventoryservice.product.web;
 import com.grupolainmaculada.cloud.inventoryservice.product.domain.ProductId;
 import com.grupolainmaculada.cloud.inventoryservice.product.domain.ProductNotFoundException;
 import com.grupolainmaculada.cloud.inventoryservice.product.service.ProductService;
-import com.grupolainmaculada.cloud.inventoryservice.product.web.ProductController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
