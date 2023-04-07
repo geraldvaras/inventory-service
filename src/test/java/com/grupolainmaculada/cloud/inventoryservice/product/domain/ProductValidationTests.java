@@ -1,7 +1,5 @@
 package com.grupolainmaculada.cloud.inventoryservice.product.domain;
 
-import com.grupolainmaculada.cloud.inventoryservice.product.domain.Product;
-import com.grupolainmaculada.cloud.inventoryservice.product.domain.ProductId;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
