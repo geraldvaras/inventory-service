@@ -20,33 +20,34 @@ class ProductJsonTests {
 
     @Test
     void testSerialize() throws Exception {
-        var productId = ProductId.of("002", "001", "30012312");
-        var product = new Product(productId, "PEPSI 300ML",
-                new BigDecimal("3.12"), new BigDecimal("2.34"));
+        var id = ProductId.of("002", "002", "001", "30012312");
+        var product = Product.of(id, "PEPSI 300ML", 1, new BigDecimal("3.12"), new BigDecimal("2.34"));
         var jsonContent = json.write(product);
         assertThat(jsonContent).extractingJsonPathStringValue("@.id.code", "30012312")
-                .isEqualTo(product.id().code());
-        assertThat(jsonContent).extractingJsonPathStringValue("@.description", product.description());
+                .isEqualTo(product.getId().getCode());
+        assertThat(jsonContent).extractingJsonPathStringValue("@.description", product.getDescription());
     }
 
     @Test
     void testDeserialize() throws IOException {
         var content = """
                 {
-                   "id": {
-                     "organizationId": "002",
-                     "branchId": "001",
-                     "code": "30012312"
-                   },
-                   "description": "PEPSI 300ML",
-                   "unitPrice": "3.30",
-                   "unitCost": "2.39"
-                 }
+                    "id" : {
+                            "organizationId" : "002",
+                            "branchId" : "001",
+                            "warehouseId" : "001"
+                            "code": "30012312"
+                    },
+                    "description": "PEPSI 300ML",
+                    "fraction" : "1",
+                    "unitPrice": "3.30",
+                    "unitCost": "2.39"
+                }
                 """;
-        var productId = ProductId.of("002", "001", "30012312");
+        var id = ProductId.of("002", "002", "001", "30012312");
         assertThat(json.parse(content))
                 .usingRecursiveComparison()
-                .isEqualTo(new Product(productId, "PEPSI 300ML",
+                .isEqualTo(Product.of(id, "PEPSI 300ML", 1,
                         new BigDecimal("3.30"), new BigDecimal("2.39")));
     }
 }

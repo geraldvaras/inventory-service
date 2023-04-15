@@ -26,10 +26,12 @@ public class ProductController {
     public Product getById(
             @RequestHeader("Organization-Id") String organizationId,
             @RequestHeader("Branch-Id") String branchId,
+            @RequestHeader("Warehouse-Id") String warehouseId,
             @PathVariable String code) {
-        ProductId id = ProductId.of(organizationId, branchId, code);
+        ProductId id = ProductId.of(organizationId, branchId, warehouseId, code);
         return productService.viewProductDetails(id);
     }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,8 +44,9 @@ public class ProductController {
     public void delete(
             @RequestHeader("Organization-Id") String organizationId,
             @RequestHeader("Branch-Id") String branchId,
+            @RequestHeader("Warehouse-Id") String warehouseId,
             @PathVariable String code) {
-        ProductId id = ProductId.of(organizationId, branchId, code);
+        ProductId id = ProductId.of(organizationId, branchId, warehouseId, code);
         productService.removeProductCatalog(id);
     }
 
@@ -51,8 +54,9 @@ public class ProductController {
     public Product put(
             @RequestHeader("Organization-Id") String organizationId,
             @RequestHeader("Branch-Id") String branchId,
+            @RequestHeader("Warehouse-Id") String warehouseId,
             @PathVariable String code, @Valid @RequestBody Product product) {
-        ProductId id = ProductId.of(organizationId, branchId, code);
+        ProductId id = ProductId.of(organizationId, branchId, warehouseId, code);
         return productService.editProductDetails(id, product);
     }
 }

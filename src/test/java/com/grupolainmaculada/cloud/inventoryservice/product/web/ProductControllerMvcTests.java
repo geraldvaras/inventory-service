@@ -24,13 +24,13 @@ class ProductControllerMvcTests {
 
     @Test
     void whenGetProductNotExistingThenShouldReturn404() throws Exception {
-        var productId = new ProductId("002", "001", "30012312");
-        given(productService.viewProductDetails(productId))
+        var id = ProductId.of("002","002", "001", "30012319");
+        given(productService.viewProductDetails(id))
                 .willThrow(ProductNotFoundException.class);
         mockMvc.perform(
-                        get("/products/" + productId.code())
-                                .header("Organization-Id", productId.organizationId())
-                                .header("Branch-Id", productId.branchId())
+                        get("/products/" + id.getCode())
+                                .header("Organization-Id", id.getOrganizationId())
+                                .header("Branch-Id", id.getBranchId())
                 )
                 .andExpect(status().isNotFound());
 

@@ -1,0 +1,32 @@
+server:
+  port: 9001
+  tomcat:
+    connection-timeout: 2s
+    keep-alive-timeout: 15s
+    threads:
+      max: 50
+      min-spare: 5
+#We will manage with flyway
+spring:
+  #sql:
+    #init:
+      #mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    show-sql: true
+    properties:
+      hibernate:
+        type:
+          preferred_instant_jdbc_type: TIMESTAMP
+        format_sql: true
+  datasource:
+    username: 'sa'
+    password: 'G@briel@123'
+    url: jdbc:sqlserver://localhost:1433;databaseName=INVENTORYDB;encrypt=true;trustServerCertificate=true
+    hikari:
+      connection-timeout: 2000
+      maximum-pool-size: 5
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type: trace

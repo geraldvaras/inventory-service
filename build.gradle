@@ -29,8 +29,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.flywaydb:flyway-sqlserver'
+	implementation files('/libs/jconn4.jar')
+	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
+	testImplementation 'org.testcontainers:mssqlserver'
 }
 
 dependencyManagement {
@@ -38,6 +48,10 @@ dependencyManagement {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
 	}
+}
+
+bootRun {
+	systemProperty 'spring.profiles.active', 'testdata'
 }
 
 bootBuildImage {

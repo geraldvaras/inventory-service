@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:tc:sqlserver:///inventorydb
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: sa
+    password: G@briel@123

@@ -21,9 +21,10 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+
     public Product addProductToCatalog(Product product) {
-        if (productRepository.existsById(product.id())) {
-            throw new ProductAlreadyExistsException(product.id());
+        if (productRepository.existsById(product.getId())) {
+            throw new ProductAlreadyExistsException(product.getId());
         }
         return productRepository.save(product);
     }
@@ -35,11 +36,12 @@ public class ProductService {
     public Product editProductDetails(ProductId id, Product product) {
         return productRepository.findById(id)
                 .map(existinProduct -> {
-                    new Product(
-                            existinProduct.id(),
-                            product.description(),
-                            product.unitPrice(),
-                            product.unitCost());
+                    Product.of(
+                            existinProduct.getId(),
+                            product.getDescription(),
+                            product.getFraction(),
+                            product.getUnitPrice(),
+                            product.getUnitCost());
                     return productRepository.save(product);
                 }).orElseGet(() -> addProductToCatalog(product));
     }

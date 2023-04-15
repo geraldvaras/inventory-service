@@ -24,16 +24,16 @@ class ProductValidationTests {
 
     @Test
     void whenAllFieldsCorrectThenValidationSucceeds() {
-        var id = ProductId.of("002", "002", "30012312");
-        var product = new Product(id, "Pepsi 300ml", new BigDecimal("3.12"), new BigDecimal("3.15"));
+        var id = ProductId.of("002", "002", "001", "30012312");
+        var product = Product.of(id, "Pepsi 300ml", 1, new BigDecimal("3.12"), new BigDecimal("3.15"));
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
         assertThat(violations).isEmpty();
     }
 
     @Test
     void whenUnitPriceIsNegativeThenValidationFails() {
-        var id = ProductId.of("002", "002", "30012312");
-        var product = new Product(id, "Pepsi 300ml", new BigDecimal("-3.12"), new BigDecimal("3.15"));
+        var id = ProductId.of("002", "002", "001", "30012312");
+        var product = Product.of(id, "Pepsi 300ml", 1, new BigDecimal("-3.12"), new BigDecimal("3.15"));
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
         assertThat(violations).hasSize(1);
         assertThat(violations.iterator().next().getMessage())
@@ -42,8 +42,8 @@ class ProductValidationTests {
 
     @Test
     void whenProducCodeDefindButIncorrectFormatThenValidationFails() {
-        var id = ProductId.of("002", "002", "A0012312");
-        var product = new Product(id, "Pepsi 300ml", new BigDecimal("3.12"), new BigDecimal("3.15"));
+        var id = ProductId.of("002", "002", "001", "A0012312");
+        var product = Product.of(id, "Pepsi 300ml", 1, new BigDecimal("3.12"), new BigDecimal("3.15"));
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
         assertThat(violations).hasSize(1);
         assertThat(violations.iterator().next().getMessage())
