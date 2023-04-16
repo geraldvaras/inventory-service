@@ -35,16 +35,17 @@ class ProductJsonTests {
                     "id" : {
                             "organizationId" : "002",
                             "branchId" : "001",
-                            "warehouseId" : "001"
-                            "code": "30012312"
+                            "warehouseId" : "001",
+                            "code" : "30012312"
                     },
                     "description": "PEPSI 300ML",
                     "fraction" : "1",
-                    "unitPrice": "3.30",
-                    "unitCost": "2.39"
+                    "unitPrice" : "3.30",
+                    "unitCost" : "2.39",
+                    "version" : "0"
                 }
                 """;
-        var id = ProductId.of("002", "002", "001", "30012312");
+        var id = ProductId.of("002", "001", "001", "30012312");
         assertThat(json.parse(content))
                 .usingRecursiveComparison()
                 .isEqualTo(Product.of(id, "PEPSI 300ML", 1,

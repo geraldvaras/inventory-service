@@ -31,6 +31,7 @@ class ProductControllerMvcTests {
                         get("/products/" + id.getCode())
                                 .header("Organization-Id", id.getOrganizationId())
                                 .header("Branch-Id", id.getBranchId())
+                                .header("Warehouse-Id", id.getWarehouseId())
                 )
                 .andExpect(status().isNotFound());
 

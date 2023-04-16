@@ -56,7 +56,11 @@ Start an interactive sqlcmd:
 ```bash
 docker exec -it inventory-mssqlserver-catalog /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P G@briel@123
 ```
-
+Create database
+```bash
+CREATE DATABASE INVENTORYDB
+GO
+```
 |                               PSQL Command	                                |          Description           |
 |:--------------------------------------------------------------------------:|:------------------------------:|
 |                           `sqlcmd Sp_databases`                            |      List all databases.       |
