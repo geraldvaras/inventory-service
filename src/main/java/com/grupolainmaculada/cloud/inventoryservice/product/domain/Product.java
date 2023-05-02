@@ -5,10 +5,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,10 +12,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "PRODUCTOS")
@@ -33,10 +25,8 @@ public class Product {
     @NotBlank(message = "The description must be defined.")
     private String description;
 
-    @Column(name = "FRACCIONES")
-    @NotNull(message = "The fraction must be defined.")
-    @Positive(message = "The fraction must be greater than zero.")
-    private Integer fraction;
+    @Embedded
+    private Fraction fraction;
 
     @Column(name = "PRECOSTO")
     @NotNull(message = "The unit price must be defined.")
@@ -53,14 +43,95 @@ public class Product {
     private Integer version;
 
     @CreatedDate
-    @Column(name = "ROWFECHAHORA")
+    @Column(name = "ROWFECHAHORA", updatable = false)
     private Instant createdDate;
 
     @LastModifiedDate
     @Column(name = "UPDATEFECHAHORA")
     private Instant lastModifiedDate;
 
-    public static Product of(ProductId id, String description, Integer fraction, BigDecimal unitPrice, BigDecimal unitCost){
-        return new Product(id, description, fraction, unitPrice, unitCost, 0, null, null);
+    public static Product of(ProductId id, String description, Fraction fraction,
+                             BigDecimal unitPrice, BigDecimal unitCost) {
+        return new Product(id, description, fraction, unitPrice, unitCost,
+                0, null, null);
+    }
+
+    public Product(
+            ProductId id, String description, Fraction fraction, BigDecimal unitPrice,
+            BigDecimal unitCost, Integer version, Instant createdDate, Instant lastModifiedDate) {
+        this.id = id;
+        this.description = description;
+        this.fraction = fraction;
+        this.unitPrice = unitPrice;
+        this.unitCost = unitCost;
+        this.version = version;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Product() {}
+
+    public ProductId getId() {
+        return id;
+    }
+
+    public void setId(ProductId id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Fraction getFraction() {
+        return fraction;
+    }
+
+    public void setFraction(Fraction fraction) {
+        this.fraction = fraction;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getUnitCost() {
+        return unitCost;
+    }
+
+    public void setUnitCost(BigDecimal unitCost) {
+        this.unitCost = unitCost;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 }

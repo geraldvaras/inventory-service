@@ -8,9 +8,6 @@ server:
       min-spare: 5
 #We will manage with flyway
 spring:
-  #sql:
-    #init:
-      #mode: always
   jpa:
     database-platform: org.hibernate.dialect.SQLServerDialect
     show-sql: true
@@ -20,8 +17,8 @@ spring:
           preferred_instant_jdbc_type: TIMESTAMP
         format_sql: true
   datasource:
-    username: 'sa'
-    password: 'G@briel@123'
+    username: sa
+    password: G@briel@123
     url: jdbc:sqlserver://localhost:1433;databaseName=INVENTORYDB;encrypt=true;trustServerCertificate=true
     hikari:
       connection-timeout: 2000
