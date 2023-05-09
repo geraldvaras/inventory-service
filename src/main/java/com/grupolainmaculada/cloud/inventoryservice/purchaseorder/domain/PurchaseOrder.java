@@ -1,12 +1,12 @@
 package com.grupolainmaculada.cloud.inventoryservice.purchaseorder.domain;
 
+import com.grupolainmaculada.cloud.inventoryservice.common.domain.SupplierInfo;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -21,6 +21,21 @@ public class PurchaseOrder {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PurchaseOrderItem> items = new HashSet<>();
 
+    @Column(name = "NUMITEM")
+    private Integer itemNumber;
+
+    @Column(name = "NOTAS")
+    private String notes;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "internalCode", column = @Column(name = "CODPROV")),
+            @AttributeOverride(name = "comercialName", column = @Column(name = "COMPANIA")),
+            @AttributeOverride(name = "documentNumber", column = @Column(name = "RUC")),
+            @AttributeOverride(name = "address", column = @Column(name = "DIRECCION"))
+    })
+    private SupplierInfo supplierInfo;
+
     @Version
     @Column(name = "VERSION")
     private Integer version;
@@ -29,13 +44,8 @@ public class PurchaseOrder {
     @Column(name = "UPDATEFECHAHORA")
     private Instant lastModifiedDate;
 
-    public void addPurchaseDetail(PurchaseOrderItem orderDetail) {
-        if (Objects.isNull(orderDetail)) {
-            items = new HashSet<>();
-        }
-        items.add(orderDetail);
-    }
-
+    @Column(name = "FECHEMISION")
+    private Instant issueDate;
     public PurchaseOrder() {
     }
 
@@ -75,7 +85,39 @@ public class PurchaseOrder {
         return items;
     }
 
-    public void setItems(Set<PurchaseOrderItem> items) {
+    private void setItems(Set<PurchaseOrderItem> items) {
         this.items = items;
+    }
+
+    public Integer getItemNumber() {
+        return itemNumber;
+    }
+
+    private void setItemNumber(Integer itemNumber) {
+        this.itemNumber = itemNumber;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    private void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public SupplierInfo getSupplierInfo() {
+        return supplierInfo;
+    }
+
+    private void setSupplierInfo(SupplierInfo supplierInfo) {
+        this.supplierInfo = supplierInfo;
+    }
+
+    public Instant getIssueDate() {
+        return issueDate;
+    }
+
+    private void setIssueDate(Instant issueDate) {
+        this.issueDate = issueDate;
     }
 }

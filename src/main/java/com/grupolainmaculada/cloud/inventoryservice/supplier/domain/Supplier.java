@@ -19,7 +19,7 @@ import java.time.Instant;
 public class Supplier {
 
     @EmbeddedId
-    private SupplierId id;
+    private SupplierId supplierId;
 
     @Column(name = "COMPANIA")
     private String businessName;
@@ -39,8 +39,11 @@ public class Supplier {
     @Column(name = "ROWFECHAHORA")
     private Instant lastModifiedDate;
 
-    public Supplier(SupplierId id, String businessName, String doi) {
-        this.id = id;
+    @Column(name = "ESTADO")
+    private Integer state;
+
+    public Supplier(SupplierId supplierId, String businessName, String doi) {
+        this.supplierId = supplierId;
         this.businessName = businessName;
         this.doi = doi;
     }

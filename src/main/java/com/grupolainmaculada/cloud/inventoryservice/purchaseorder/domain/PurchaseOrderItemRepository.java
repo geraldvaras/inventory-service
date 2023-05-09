@@ -1,10 +1,12 @@
 package com.grupolainmaculada.cloud.inventoryservice.purchaseorder.domain;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Set;
+public interface PurchaseOrderItemRepository
+        extends CrudRepository<PurchaseOrderItem, PurchaseOrderItemId> {
 
-public interface PurchaseOrderItemRepository extends CrudRepository<PurchaseOrderItem, PurchaseOrderItemId> {
-
-    Set<PurchaseOrderItem> findAllByPurchaseOrder(PurchaseOrder purchaseOrder);
+    Page<PurchaseOrderItem> findByPurchaseOrderPurchaseOrderIdOrderByPurchaseOrderItemIdItem
+            (PurchaseOrderId purchaseOrderId, Pageable pageable);
 }

@@ -6,16 +6,15 @@ server:
     threads:
       max: 50
       min-spare: 5
-#We will manage with flyway
 spring:
   jpa:
     database-platform: org.hibernate.dialect.SQLServerDialect
-    show-sql: true
     properties:
       hibernate:
         type:
           preferred_instant_jdbc_type: TIMESTAMP
         format_sql: true
+    show-sql: true
   datasource:
     username: sa
     password: G@briel@123
@@ -25,5 +24,5 @@ spring:
       maximum-pool-size: 5
 logging:
   level:
-    org.hibernate.sql: debug
-    org.hibernate.type: trace
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

@@ -1,19 +1,23 @@
-package com.grupolainmaculada.cloud.inventoryservice.product.domain;
+package com.grupolainmaculada.cloud.inventoryservice.common.domain;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
+@Embeddable
 public class Fraction {
 
-    @Column(name = "FRACCIONES")
     private Integer fraction;
 
-    public Fraction(){}
+    public Fraction() {
+    }
 
     private Fraction(Integer fraction) {
         this.fraction = fraction;
     }
 
     public static Fraction of(Integer fraction) {
+        if (fraction < 0) {
+            throw new FractionNegativeException(fraction);
+        }
         return new Fraction(fraction);
     }
 
@@ -21,7 +25,7 @@ public class Fraction {
         return fraction;
     }
 
-    public void setFraction(Integer fraction) {
+    private void setFraction(Integer fraction) {
         this.fraction = fraction;
     }
 }

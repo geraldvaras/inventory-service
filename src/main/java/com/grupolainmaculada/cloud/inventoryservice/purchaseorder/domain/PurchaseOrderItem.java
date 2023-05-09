@@ -1,5 +1,8 @@
 package com.grupolainmaculada.cloud.inventoryservice.purchaseorder.domain;
 
+import com.grupolainmaculada.cloud.inventoryservice.common.domain.Fraction;
+import com.grupolainmaculada.cloud.inventoryservice.common.domain.ProductInfo;
+import com.grupolainmaculada.cloud.inventoryservice.common.domain.Quantity;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,56 +20,44 @@ public class PurchaseOrderItem {
     @EmbeddedId
     private PurchaseOrderItemId purchaseOrderItemId;
 
-    @Column(name = "CODPROD")
-    private String productCode;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "internalCode", column = @Column(name = "CODPROD")),
+            @AttributeOverride(name = "description", column = @Column(name = "DESPROD")),
+            @AttributeOverride(name = "presentation", column = @Column(name = "DESPRES")),
+            @AttributeOverride(name = "barCode", column = @Column(name = "CODBAR"))
 
-    @Column(name = "DESPROD")
-    private String productDescription;
+    })
+    private ProductInfo productInfo;
 
-    @Column(name = "DESPRES")
-    private String productPresentation;
+    @Embedded
+    @AttributeOverride(name = "fraction", column = @Column(name = "FRACCION"))
+    private Fraction fraction;
 
-    @Column(name = "FRACCION")
-    private Integer fraction;
-
-    @Column(name = "CANDES")
-    private Integer integerQuantity;
-
-    @Column(name = "CANDESMIN")
-    private Integer fractionalQuantity;
-
-    @Column(name = "CANBONI")
-    private Integer bonusQuantity;
-
-    @Column(name = "TOTCANTMIN")
-    private Integer totalQuantity;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "integer", column = @Column(name = "CANDES")),
+            @AttributeOverride(name = "fractional", column = @Column(name = "CANDESMIN")),
+            @AttributeOverride(name = "bonus", column = @Column(name = "CANBONI")),
+            @AttributeOverride(name = "total", column = @Column(name = "TOTCANTMIN"))
+    })
+    private Quantity quantity;
 
     public PurchaseOrderItem() {
     }
 
     private PurchaseOrderItem(
-            PurchaseOrder purchaseOrder, PurchaseOrderItemId id, String productCode, String productDescription,
-            String productPresentation, Integer fraction, Integer integerQuantity, Integer fractionalQuantity,
-            Integer bonusQuantity, Integer totalQuantity) {
+            PurchaseOrder purchaseOrder, PurchaseOrderItemId id, ProductInfo productInfo, Fraction fraction, Quantity quantity) {
         this.purchaseOrder = purchaseOrder;
         this.purchaseOrderItemId = id;
-        this.productCode = productCode;
-        this.productDescription = productDescription;
-        this.productPresentation = productPresentation;
+        this.productInfo = productInfo;
         this.fraction = fraction;
-        this.integerQuantity = integerQuantity;
-        this.fractionalQuantity = fractionalQuantity;
-        this.bonusQuantity = bonusQuantity;
-        this.totalQuantity = totalQuantity;
+        this.quantity = quantity;
     }
 
     public static PurchaseOrderItem of(
-            PurchaseOrder purchaseOrder, PurchaseOrderItemId id, String productCode, String productDescription,
-            String productPresentation, Integer fraction, Integer integerQuantity, Integer fractionalQuantity,
-            Integer bonusQuantity, Integer totalQuantity) {
-        return new PurchaseOrderItem(purchaseOrder, id, productCode, productDescription,
-                productPresentation, fraction, integerQuantity, fractionalQuantity, bonusQuantity,
-                totalQuantity);
+            PurchaseOrder purchaseOrder, PurchaseOrderItemId id, ProductInfo productInfo, Fraction fraction, Quantity quantity) {
+        return new PurchaseOrderItem(purchaseOrder, id, productInfo, fraction, quantity);
     }
 
     public PurchaseOrder getPurchaseOrder() {
@@ -85,67 +76,27 @@ public class PurchaseOrderItem {
         this.purchaseOrderItemId = id;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public ProductInfo getProductInfo() {
+        return productInfo;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    private void setProductInfo(ProductInfo productInfo) {
+        this.productInfo = productInfo;
     }
 
-    public String getProductDescription() {
-        return productDescription;
-    }
-
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
-    }
-
-    public String getProductPresentation() {
-        return productPresentation;
-    }
-
-    public void setProductPresentation(String productPresentation) {
-        this.productPresentation = productPresentation;
-    }
-
-    public Integer getFraction() {
+    public Fraction getFraction() {
         return fraction;
     }
 
-    public void setFraction(Integer fraction) {
+    private void setFraction(Fraction fraction) {
         this.fraction = fraction;
     }
 
-    public Integer getIntegerQuantity() {
-        return integerQuantity;
+    public Quantity getQuantity() {
+        return quantity;
     }
 
-    public void setIntegerQuantity(Integer integerQuantity) {
-        this.integerQuantity = integerQuantity;
-    }
-
-    public Integer getFractionalQuantity() {
-        return fractionalQuantity;
-    }
-
-    public void setFractionalQuantity(Integer fractionalQuantity) {
-        this.fractionalQuantity = fractionalQuantity;
-    }
-
-    public Integer getBonusQuantity() {
-        return bonusQuantity;
-    }
-
-    public void setBonusQuantity(Integer bonusQuantity) {
-        this.bonusQuantity = bonusQuantity;
-    }
-
-    public Integer getTotalQuantity() {
-        return totalQuantity;
-    }
-
-    public void setTotalQuantity(Integer totalQuantity) {
-        this.totalQuantity = totalQuantity;
+    private void setQuantity(Quantity quantity) {
+        this.quantity = quantity;
     }
 }

@@ -1,16 +1,15 @@
 package com.grupolainmaculada.cloud.inventoryservice.product.domain;
 
+import com.grupolainmaculada.cloud.inventoryservice.common.domain.Fraction;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -18,29 +17,25 @@ import java.time.Instant;
 public class Product {
 
     @EmbeddedId
-    @Valid
     private ProductId id;
 
     @Column(name = "DESPROD")
-    @NotBlank(message = "The description must be defined.")
     private String description;
 
     @Embedded
+    @AttributeOverride(name = "fraction", column = @Column(name = "FRACCIONES"))
     private Fraction fraction;
 
-    @Column(name = "PRECOSTO")
-    @NotNull(message = "The unit price must be defined.")
-    @Positive(message = "The unit price must be greater than zero.")
+    @Column(name = "PREUNI")
     private BigDecimal unitPrice;
 
-    @Column(name = "PREUNI")
-    @NotNull(message = "The unit cost must be defined.")
-    @Positive(message = "The unit cost must be greater than zero.")
+    @Column(name = "PRECOSTO")
     private BigDecimal unitCost;
 
     @Version
     @Column(name = "VERSION")
     private Integer version;
+
 
     @CreatedDate
     @Column(name = "ROWFECHAHORA", updatable = false)
@@ -50,15 +45,24 @@ public class Product {
     @Column(name = "UPDATEFECHAHORA")
     private Instant lastModifiedDate;
 
-    public static Product of(ProductId id, String description, Fraction fraction,
-                             BigDecimal unitPrice, BigDecimal unitCost) {
-        return new Product(id, description, fraction, unitPrice, unitCost,
-                0, null, null);
-    }
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @AttributeOverrides({
+            @AttributeOverride(name = "CODEMP", column = @Column(name = "CODEMP")),
+            @AttributeOverride(name = "CODSUC", column = @Column(name = "CODSUC")),
+            @AttributeOverride(name = "CODALM", column = @Column(name = "CODALM")),
+            @AttributeOverride(name = "CODPROD", column = @Column(name = "CODPROD")),
+            @AttributeOverride(name = "barCodeId.barCode", column = @Column(name = "CODBAR"))
 
-    public Product(
-            ProductId id, String description, Fraction fraction, BigDecimal unitPrice,
-            BigDecimal unitCost, Integer version, Instant createdDate, Instant lastModifiedDate) {
+    })
+    private Set<BarCode> barCode = new HashSet<>();
+
+    @Column(name = "ESTPROD")
+    private Integer state;
+
+    private Product(ProductId id, String description,
+                    Fraction fraction, BigDecimal unitPrice, BigDecimal unitCost,
+                    Integer version,
+                    Instant createdDate, Instant lastModifiedDate, Set<BarCode> barCode) {
         this.id = id;
         this.description = description;
         this.fraction = fraction;
@@ -67,15 +71,23 @@ public class Product {
         this.version = version;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
+        this.barCode = barCode;
     }
 
-    public Product() {}
+    public static Product of(ProductId productId, String description, Fraction fraction,
+                             BigDecimal unitPrice, BigDecimal unitCost) {
+        return new Product(productId, description, fraction, unitPrice, unitCost,
+                null, null, null, null);
+    }
+
+    public Product() {
+    }
 
     public ProductId getId() {
         return id;
     }
 
-    public void setId(ProductId id) {
+    private void setId(ProductId id) {
         this.id = id;
     }
 
@@ -83,7 +95,7 @@ public class Product {
         return description;
     }
 
-    public void setDescription(String description) {
+    private void setDescription(String description) {
         this.description = description;
     }
 
@@ -91,7 +103,7 @@ public class Product {
         return fraction;
     }
 
-    public void setFraction(Fraction fraction) {
+    private void setFraction(Fraction fraction) {
         this.fraction = fraction;
     }
 
@@ -99,7 +111,7 @@ public class Product {
         return unitPrice;
     }
 
-    public void setUnitPrice(BigDecimal unitPrice) {
+    private void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
@@ -107,7 +119,7 @@ public class Product {
         return unitCost;
     }
 
-    public void setUnitCost(BigDecimal unitCost) {
+    private void setUnitCost(BigDecimal unitCost) {
         this.unitCost = unitCost;
     }
 
@@ -115,7 +127,7 @@ public class Product {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    private void setVersion(Integer version) {
         this.version = version;
     }
 
@@ -123,7 +135,7 @@ public class Product {
         return createdDate;
     }
 
-    public void setCreatedDate(Instant createdDate) {
+    private void setCreatedDate(Instant createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -131,7 +143,23 @@ public class Product {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Instant lastModifiedDate) {
+    private void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Set<BarCode> getBarCode() {
+        return barCode;
+    }
+
+    private void setBarCode(Set<BarCode> barCode) {
+        this.barCode = barCode;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    private void setState(Integer state) {
+        this.state = state;
     }
 }
